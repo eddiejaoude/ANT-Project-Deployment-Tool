@@ -1,0 +1,7 @@
+A basic project deployment tool with ANT.
+
+== Example ==
+Dryrun:
+> ant -Ddryrun=true
+Real:
+> ant

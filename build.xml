@@ -1,0 +1,58 @@
+<project name="Deployment" default="deploy" basedir=".">
+    <description>
+        Deployment tool
+    </description>
+
+  <!-- set global properties for this build -->
+  <property name="project"  value="https://eddiejaoude@github.com/eddiejaoude/ANT-Project-Deployment-Tool.git"/>
+  <property name="dest"  value="tmp2"/>
+  <property name="tmp"  location="tmp"/>
+
+  <target name="init">
+	<record name="build.log" loglevel="verbose" append="false"/>
+  </target>
+
+  <target name="clean">
+	<delete dir="${tmp}"/>
+  </target>
+
+  <target name="clone">
+	<exec executable="git" failonerror="true">
+            <arg line="clone ${project} ${tmp}" />
+        </exec>
+	<delete dir="${tmp}/.git/"/>
+  </target>
+
+  <target name="production-mode">
+	<move file="${tmp}/app/config/core.prd.php" tofile="${tmp}/app/config/core.php"/>
+	<move file="${tmp}/app/config/database.prd.php" tofile="${tmp}/app/config/database.php"/>
+  </target>
+
+  <target name="rsync">
+	<antcall target="rsync-dryrun"/>
+	<antcall target="rsync-real"/>
+  </target>
+
+  <target name="rsync-dryrun" depends="dryrun-check" if="conditionIsTrue">
+	<echo message="Dryrun mode"/>
+	<exec executable="rsync" failonerror="true">
+            <arg line="--dry-run ${tmp} ${dest}" />
+        </exec>
+  </target>
+  
+  <target name="rsync-real" depends="dryrun-check" unless="conditionIsTrue">
+	<echo message="Live mode"/>
+	<exec executable="rsync" failonerror="true">
+            <arg line="${tmp} ${dest}" />
+        </exec>
+  </target>
+
+  <target name="dryrun-check">
+	<condition property="conditionIsTrue">
+		<equals arg1="${dryrun}" arg2="true"/>
+	</condition>
+  </target>
+
+  <target name="deploy" depends="init,clean,clone,production-mode,rsync"/>
+
+</project>
