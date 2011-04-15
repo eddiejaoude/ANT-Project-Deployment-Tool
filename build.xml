@@ -35,15 +35,17 @@
 
   <target name="rsync-dryrun" depends="dryrun-check" if="conditionIsTrue">
 	<echo message="Dryrun mode"/>
-	<exec executable="rsync" failonerror="true">
-            <arg line="--dry-run ${tmp} ${dest}" />
+	<exec executable="sh" failonerror="true">
+            <arg value="-c" />
+            <arg value="rsync -trvi --delete --dry-run --stats ${tmp}/ ${dest}/ | grep -iEv 'f\.\.t|d\.\.t'" />
         </exec>
   </target>
   
   <target name="rsync-real" depends="dryrun-check" unless="conditionIsTrue">
 	<echo message="Live mode"/>
-	<exec executable="rsync" failonerror="true">
-            <arg line="${tmp} ${dest}" />
+	<exec executable="sh" failonerror="true">
+            <arg value="-c" />
+            <arg value="rsync -trvi --delete --stats ${tmp}/ ${dest}/ | grep -iEv 'f\.\.t|d\.\.t'" />
         </exec>
   </target>
 
