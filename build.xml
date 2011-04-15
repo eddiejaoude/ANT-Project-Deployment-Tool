@@ -23,11 +23,6 @@
 	<delete dir="${tmp}/.git/"/>
   </target>
 
-  <target name="production-mode">
-	<move file="${tmp}/app/config/core.prd.php" tofile="${tmp}/app/config/core.php"/>
-	<move file="${tmp}/app/config/database.prd.php" tofile="${tmp}/app/config/database.php"/>
-  </target>
-
   <target name="rsync">
 	<antcall target="rsync-dryrun"/>
 	<antcall target="rsync-real"/>
@@ -55,6 +50,6 @@
 	</condition>
   </target>
 
-  <target name="deploy" depends="init,clean,clone,production-mode,rsync"/>
+  <target name="deploy" depends="init,clean,clone,rsync"/>
 
 </project>
