@@ -23,6 +23,14 @@
 	<delete dir="${tmp}/.git/"/>
   </target>
 
+  <target name="tag" if="tag">
+        <echo message="Checkout Tag"/>
+        <exec executable="sh" failonerror="true" dir="${tmp}">
+            <arg value="-c" />
+            <arg value="git checkout ${tag}" />
+        </exec>
+  </target>
+
   <target name="rsync">
 	<antcall target="rsync-dryrun"/>
 	<antcall target="rsync-real"/>
@@ -50,6 +58,6 @@
 	</condition>
   </target>
 
-  <target name="deploy" depends="init,clean,clone,rsync"/>
+  <target name="deploy" depends="init,clean,clone,tag,rsync"/>
 
 </project>
