@@ -8,6 +8,11 @@
   <property name="dest"  value="tmp2"/>
   <property name="tmp"  location="tmp"/>
 
+  <target name="loadconfig">
+	<loadfile property="project.config" srcFile="project.xml"/>
+        <echo>${project.config}</echo>
+  </target>
+
   <target name="init">
 	<record name="build.log" loglevel="verbose" append="false"/>
   </target>
@@ -58,6 +63,7 @@
 	</condition>
   </target>
 
-  <target name="deploy" depends="init,clean,clone,tag,rsync"/>
+  <!--<target name="deploy" depends="init,clean,clone,tag,rsync"/>-->
+  <target name="deploy" depends="loadconfig"/>
 
 </project>

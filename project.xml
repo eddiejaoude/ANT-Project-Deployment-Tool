@@ -1,0 +1,3 @@
+<configuration name="project">
+    <property name="path">http://test.com/project</property>
+</configuration>
